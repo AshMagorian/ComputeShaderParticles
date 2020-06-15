@@ -161,8 +161,8 @@ GLuint ShaderProgram::AttachComputeShader(std::string _path)
 		glGetShaderiv(computeShaderId, GL_INFO_LOG_LENGTH, &maxLength);
 		std::vector<GLchar> errorlog(maxLength);
 		glGetShaderInfoLog(computeShaderId, maxLength, &maxLength, &errorlog[0]);
-		//std::cout << &errorlog.at(0) << std::endl;
-		throw Exception("Fragment shader compile error: " + (std::string)&errorlog.at(0));
+		std::cout << &errorlog.at(0) << std::endl;
+		throw Exception("Compute shader compile error: " + (std::string)&errorlog.at(0));
 	}
 	m_isComputeShader = true;
 	glAttachShader(m_id, computeShaderId);
@@ -173,17 +173,20 @@ void ShaderProgram::Draw(std::shared_ptr<ParticlesVA> _va)
 {
 	glUseProgram(m_id);
 	glBindVertexArray(_va->GetId());
-	glDrawArrays(GL_POINTS, 0, _va->GetNumParticles());
+	//glDrawArrays(GL_POINTS, 0, _va->GetNumParticles());
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, _va->GetNumParticles());
 
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
 
-void ShaderProgram::InvokeComputeShader()
+void ShaderProgram::InvokeComputeShader(std::shared_ptr<ParticlesVA> _va)
 {
 	if (m_isComputeShader == true)
 	{
-
+		glUseProgram(m_id);
+		glDispatchCompute(_va->GetNumParticles() / _va->GetWorkGroupSize(), 1, 1);
+		glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 	}
 }
 

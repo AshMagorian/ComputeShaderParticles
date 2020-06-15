@@ -5,5 +5,6 @@
 #include "Application.h"
 #include "ShaderProgram.h"
 #include "ParticlesVA.h"
+#include "Camera.h"
 
 #endif

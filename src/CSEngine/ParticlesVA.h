@@ -21,7 +21,6 @@ class ParticlesVA
 {
 private:
 	GLuint id;
-
 	int m_numParticles = 1024 * 1024;
 	int m_workGroupSize = 128;
 
@@ -39,19 +38,17 @@ private:
 	float m_vzMin = -2.0f;
 	float m_vzMax = 2.0f;
 
+	GLuint billboardvbo;
 	GLuint posSSbo;
 	GLuint velSSbo;
 	GLuint colSSbo;
-
-	struct pos* m_points;
-	struct vel* m_vels;
-	struct color* m_colors;
 
 public:
 
 	ParticlesVA();
 
-	void Init();
+	void InitBuffers();
+	void InitParticles();
 
 	int GetNumParticles() { return m_numParticles; }
 	int GetWorkGroupSize() { return m_workGroupSize; }

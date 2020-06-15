@@ -26,7 +26,7 @@ public:
 	void CreateComputeShader(std::string _comp);
 
 	void Draw(std::shared_ptr<ParticlesVA> _va);
-	void InvokeComputeShader();
+	void InvokeComputeShader(std::shared_ptr<ParticlesVA> _va);
 
 	void SetUniform(std::string uniform, glm::vec3 value);
 	void SetUniform(std::string uniform, glm::vec4 value);

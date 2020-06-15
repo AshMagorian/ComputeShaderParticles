@@ -38,6 +38,8 @@ add_library(CSEngine
 	src/CSEngine/Exception.cpp
 	src/CSEngine/ParticlesVA.h
 	src/CSEngine/ParticlesVA.cpp
+	src/CSEngine/Camera.h
+	src/CSEngine/Camera.cpp
 )
 
 if(MSVC)
