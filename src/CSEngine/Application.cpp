@@ -24,6 +24,8 @@ std::shared_ptr<Application> const Application::Init()
 	if (!SDL_GL_CreateContext(app->m_window)) { throw std::exception(); }
 	if (glewInit() != GLEW_OK) { throw std::exception(); }
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return app;
 }
 
@@ -35,11 +37,16 @@ void Application::Run()
 	m_camera = std::make_shared<Camera>();
 	m_computeShader = std::make_shared<ShaderProgram>();
 	m_renderingShader = std::make_shared<ShaderProgram>();
+	m_maskRenderingShader = std::make_shared<ShaderProgram>();
 	m_particles = std::make_shared<ParticlesVA>();
 
 	m_computeShader->CreateComputeShader("../src/resources/shaders/particleShader.comp");
 	m_renderingShader->CreateShader("../src/resources/shaders/particleShader.vert", 
 									"../src/resources/shaders/particleShader.frag");
+	m_maskRenderingShader->CreateShader("../src/resources/shaders/particleShaderTexMask.vert",
+										"../src/resources/shaders/particleShaderTexMask.frag");
+	std::shared_ptr<Texture> tex = std::make_shared<Texture>("../src/resources/textures/fadedCircle.png");
+	m_maskRenderingShader->SetUniform("in_Texture", tex);
 	m_particles->InitBuffers();
 	m_particles->InitParticles();
 	std::cout << "particles initialised" << std::endl;
@@ -83,12 +90,12 @@ void Application::Run()
 		/*
 		* Set the projection and view matrix in the shader
 		*/
-		m_renderingShader->SetUniform("in_Projection", glm::perspective(glm::radians(45.0f),
+		m_maskRenderingShader->SetUniform("in_Projection", glm::perspective(glm::radians(45.0f),
 			(float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 230.f));
-		m_renderingShader->SetUniform("in_View", m_camera->GetViewMatrix());
+		m_maskRenderingShader->SetUniform("in_View", m_camera->GetViewMatrix());
 
 		m_computeShader->InvokeComputeShader(m_particles);
-		m_renderingShader->Draw(m_particles);
+		m_maskRenderingShader->Draw(m_particles);
 
 		SDL_GL_SwapWindow(m_window);
 	}

@@ -39,9 +39,13 @@ private:
 	float m_vzMax = 2.0f;
 
 	GLuint billboardvbo;
+	GLuint texCoords;
 	GLuint posSSbo;
 	GLuint velSSbo;
 	GLuint colSSbo;
+
+	void SetBillboardVBO();
+	void SetTexCoordBO();
 
 public:
 

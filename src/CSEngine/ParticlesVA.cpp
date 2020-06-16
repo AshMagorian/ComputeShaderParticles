@@ -16,21 +16,8 @@ ParticlesVA::ParticlesVA()
 
 void ParticlesVA::InitBuffers()
 {
-	glGenBuffers(1, &billboardvbo);
-	glBindBuffer(GL_ARRAY_BUFFER, billboardvbo);
-	static const GLfloat data[] = { -0.5f, -0.5f, 0.0f, // Top left 
-							 0.5f, -0.5f, 0.0f,  // Top right
-							 -0.5f, 0.5f, 0.0f,	 // Bottom left
-							  0.5f, 0.5, 0.0f };  // Bottom right
-	glBindVertexArray(id);
-	glBindBuffer(GL_ARRAY_BUFFER, billboardvbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-		0, (void *)0);
-	glVertexAttribDivisor(0, 0); // one per vertex
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	SetBillboardVBO();
+	SetTexCoordBO();
 
 	glGenBuffers(1, &posSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posSSbo);
@@ -46,6 +33,50 @@ void ParticlesVA::InitBuffers()
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, colSSbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, m_numParticles * sizeof(struct color), NULL, GL_STATIC_DRAW);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+/*
+*Setting up the vertex points of the billboard and binding them to a buffer
+*/
+void ParticlesVA::SetBillboardVBO()
+{
+	glGenBuffers(1, &billboardvbo);
+	glBindBuffer(GL_ARRAY_BUFFER, billboardvbo);
+	static const GLfloat data[] = { -0.5f, -0.5f, 0.0f, // Top left 
+							 0.5f, -0.5f, 0.0f,  // Top right
+							 -0.5f, 0.5f, 0.0f,	 // Bottom left
+							  0.5f, 0.5, 0.0f };  // Bottom right
+	glBindVertexArray(id);
+	glBindBuffer(GL_ARRAY_BUFFER, billboardvbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+		0, (void *)0);
+	glVertexAttribDivisor(0, 0); // one per vertex
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+/*
+*Setting up the texture coordinates and binding them to a buffer
+*/
+void ParticlesVA::SetTexCoordBO()
+{
+	glGenBuffers(1, &texCoords);
+	glBindBuffer(GL_ARRAY_BUFFER, texCoords);
+	static const GLfloat data[] = { 0.0f, 1.0f,
+									1.0f, 1.0f,
+									0.0f, 0.0f,
+									1.0f, 0.0f };
+	glBindVertexArray(id);
+	glBindBuffer(GL_ARRAY_BUFFER, texCoords);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,
+		0, (void *)0);
+	glVertexAttribDivisor(0, 0); // one per vertex
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void ParticlesVA::InitParticles()

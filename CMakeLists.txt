@@ -40,6 +40,10 @@ add_library(CSEngine
 	src/CSEngine/ParticlesVA.cpp
 	src/CSEngine/Camera.h
 	src/CSEngine/Camera.cpp
+	src/CSEngine/Texture.h
+	src/CSEngine/Texture.cpp
+	src/CSEngine/stb_image.h
+	src/CSEngine/stb_image.cpp
 )
 
 if(MSVC)

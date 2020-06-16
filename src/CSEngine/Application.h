@@ -24,6 +24,7 @@ private:
 	std::shared_ptr<Camera> m_camera;
 	std::shared_ptr<ShaderProgram> m_computeShader;
 	std::shared_ptr<ShaderProgram> m_renderingShader;
+	std::shared_ptr<ShaderProgram> m_maskRenderingShader;
 	std::shared_ptr<ParticlesVA> m_particles;
 public:
 	Application() {}

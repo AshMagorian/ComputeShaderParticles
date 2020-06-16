@@ -6,5 +6,6 @@
 #include "ShaderProgram.h"
 #include "ParticlesVA.h"
 #include "Camera.h"
+#include "Texture.h"
 
 #endif
